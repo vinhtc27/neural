@@ -8,4 +8,4 @@ Command: ```make xor```
 ## Handwritten digits recognition
 + The handwritten digits recognition example uses the MNIST dataset to train a neural network to recognize handwritten digits. The dataset is included in the `data` directory. The dataset is split into a training set and a test set. The training set is used to train the network and the test set is used to evaluate the performance of the network.
 
-Unzip this dataset first: [mnist.zip](example/src/mnist/data/Archive.zip) and then use Command: ```make mnist```
+Unzip this dataset first: [mnist.zip](example/src/mnist/data/mnist.zip) and then use Command: ```make mnist```
