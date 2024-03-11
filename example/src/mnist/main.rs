@@ -8,7 +8,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     use csv::Reader;
 
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     struct Number {
         label: u8,
         pixels: Vec<u8>,
@@ -67,7 +67,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     network.train(inputs.clone(), targets.clone(), 1);
 
-    for (index, number) in test_numbers.into_iter().take(100).enumerate() {
+    for (index, number) in test_numbers.clone().into_iter().take(100).enumerate() {
         let input = number.input();
         let target = number.target();
         let label = number.label as usize;
@@ -82,11 +82,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!(
             "Input {}/{}:\n{}\n--> Answer: {} | Accuracy: {:.2}%\n",
             index + 1,
-            inputs.len(),
+            test_numbers.len(),
             number,
             answer,
             accuracy
         );
+        std::thread::sleep(std::time::Duration::from_millis(500));
     }
 
     Ok(())
