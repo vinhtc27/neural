@@ -3,8 +3,8 @@ use std::fmt::{Display, Formatter};
 use library::{activation, network::Network};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const MNIST_TRAIN: &str = "src/mnist/data/mnist_train.csv";
-    const MNIST_TEST: &str = "src/mnist/data/mnist_test.csv";
+    const MNIST_TRAIN: &str = "../data/mnist/train.csv";
+    const MNIST_TEST: &str = "../data/mnist/test.csv";
 
     use csv::Reader;
 
@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if index % 28 == 0 {
                     write!(f, "||\n||")?;
                 }
-                write!(f, "{}", if *pixel > 128 { "." } else { " " })?;
+                write!(f, "{}", if *pixel > 128 { "#" } else { " " })?;
             }
             write!(f, "||\n||============================||")?;
             Ok(())
@@ -63,31 +63,31 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let targets: Vec<Vec<f64>> = train_numbers.iter().map(|number| number.target()).collect();
 
-    let mut network = Network::new(vec![784, 16, 10], 0.1, activation::SIGMOID);
+    let mut network = Network::new(vec![784, 16, 16, 10], 0.1, activation::SIGMOID);
 
     network.train(inputs.clone(), targets.clone(), 1);
 
-    for (index, number) in test_numbers.clone().into_iter().take(100).enumerate() {
+    let step = 100;
+    for (index, number) in test_numbers.clone().into_iter().step_by(step).enumerate() {
         let input = number.input();
-        let target = number.target();
-        let label = number.label as usize;
         let output = network.feed_forward(input);
-        let accuracy = (1.0 - f64::abs(target[label] - output[label])) * 100.0;
         let answer = output
             .iter()
             .enumerate()
             .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
             .unwrap()
-            .0 as u8;
+            .0 as usize;
+        let accuracy = output[answer] * 100.0;
         println!(
-            "Input {}/{}:\n{}\n--> Answer: {} | Accuracy: {:.2}%\n",
+            "Input {}/{}:\n{}\n--> Answer: {} | Accuracy: {:.2}%\nOutput: {:?}\n",
             index + 1,
-            test_numbers.len(),
+            test_numbers.len() / step,
             number,
             answer,
-            accuracy
+            accuracy,
+            output
         );
-        std::thread::sleep(std::time::Duration::from_millis(500));
+        std::thread::sleep(std::time::Duration::from_secs(1));
     }
 
     Ok(())

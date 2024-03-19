@@ -11,7 +11,13 @@ path = "src/xor/main.rs"
 name = "mnist"
 path = "src/mnist/main.rs"
 
+[[bin]]
+name = "cifar10"
+path = "src/cifar10/main.rs"
+
 [dependencies]
+ansi_rgb = "0.2.0"
+rgb = "0.8.37"
 csv = "1.3.0"
 library = { path = "../library" }
 

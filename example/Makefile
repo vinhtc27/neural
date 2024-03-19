@@ -9,3 +9,6 @@ xor:
 
 mnist:
 	cargo run --bin mnist --release
+
+cifar10:
+	cargo run --bin cifar10 --release

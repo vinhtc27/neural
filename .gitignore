@@ -90,8 +90,12 @@ tags
 # Built Visual Studio Code Extensions
 *.vsix
 
-# Data file
-example/src/mnist/data/*csv
+# Ignore dataset files
+data/mnist/test.csv
+data/mnist/train.csv
+data/cifar10/test.csv
+data/cifar10/train.csv
+data/cifar10.zip
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
