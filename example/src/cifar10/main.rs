@@ -5,6 +5,9 @@ use std::{
 
 use library::{activation, network::Network};
 
+const EPOCHS: usize = 1;
+const LEARNING_RATE: f64 = 1e-3;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     const CIFAR10_LABEL: &str = "../data/cifar10/label.txt";
     const CIFAR10_TRAIN: &str = "../data/cifar10/train.csv";
@@ -27,7 +30,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         fn target(&self) -> Vec<f64> {
             let mut target = vec![0.0; 10];
-            target[self.label as usize] = 1.0;
+            target[self.label] = 1.0;
             target
         }
     }
@@ -41,7 +44,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     write!(f, "||\n||")?;
                 }
 
-                print!("{}", "#".fg(RGB8::new(rgb[0], rgb[1], rgb[2])));
+                write!(f, "{}", "#".fg(RGB8::new(rgb[0], rgb[1], rgb[2])))?;
             }
             write!(f, "||\n||================================||")?;
             Ok(())
@@ -56,7 +59,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .take(3072)
             .map(|x| x.parse().unwrap())
             .collect();
-        let label = record.iter().last().unwrap().parse()?;
+        let label = record.iter().next_back().unwrap().parse()?;
         train_images.push(Image { label, pixels });
     }
 
@@ -79,9 +82,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let targets: Vec<Vec<f64>> = train_images.iter().map(|number| number.target()).collect();
 
-    let mut network = Network::new(vec![3072, 64, 64, 10], 0.1, activation::SIGMOID);
+    let mut network = Network::new(
+        vec![3072, 64, 64, 10],
+        LEARNING_RATE,
+        activation::SIGMOID,
+        activation::SIGMOID,
+        None,
+    );
 
-    network.train(inputs.clone(), targets.clone(), 1);
+    network.train_mse_sgd(inputs.clone(), targets.clone(), EPOCHS);
 
     let step = 100;
     for (index, number) in test_images.clone().into_iter().step_by(step).enumerate() {

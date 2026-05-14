@@ -1,5 +1,8 @@
 use library::{activation, network::Network};
 
+const EPOCHS: usize = 10_000;
+const LEARNING_RATE: f64 = 1e-3;
+
 fn main() {
     // XOR example
     // 0 ^ 0 = 0
@@ -15,9 +18,9 @@ fn main() {
     ];
     let targets = vec![vec![0.0], vec![1.0], vec![1.0], vec![0.0]];
 
-    let mut network = Network::new(vec![2, 3, 1], 0.1, activation::SIGMOID);
+    let mut network = Network::new(vec![2, 3, 1], LEARNING_RATE, activation::SIGMOID, activation::SIGMOID, None);
 
-    network.train(inputs.clone(), targets.clone(), 10000);
+    network.train_mse_sgd(inputs.clone(), targets.clone(), EPOCHS);
 
     for (index, input) in inputs.clone().into_iter().enumerate() {
         let target = targets[index].clone()[0];

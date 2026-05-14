@@ -2,6 +2,9 @@ use std::fmt::{Display, Formatter};
 
 use library::{activation, network::Network};
 
+const EPOCHS: usize = 5;
+const LEARNING_RATE: f64 = 1e-3;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     const MNIST_TRAIN: &str = "../data/mnist/train.csv";
     const MNIST_TEST: &str = "../data/mnist/test.csv";
@@ -63,9 +66,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let targets: Vec<Vec<f64>> = train_numbers.iter().map(|number| number.target()).collect();
 
-    let mut network = Network::new(vec![784, 16, 16, 10], 0.1, activation::SIGMOID);
+    let mut network = Network::new(vec![784, 16, 16, 10], LEARNING_RATE, activation::SIGMOID, activation::SIGMOID, None);
 
-    network.train(inputs.clone(), targets.clone(), 1);
+    network.train_mse_sgd(inputs.clone(), targets.clone(), EPOCHS);
 
     let step = 100;
     for (index, number) in test_numbers.clone().into_iter().step_by(step).enumerate() {
