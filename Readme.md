@@ -1,5 +1,17 @@
-# Neural Network implementation in pure Rust from scratch
-+ This is a simple implementation of a neural network in Rust. It is a simple feedforward neural network with a single hidden layer. The network is trained using backpropagation.
+# Neural Network in pure Rust from scratch
+
+Simple feedforward MLP trained with backpropagation. No external ML dependencies — only `rand`.
+
+## Library
+
+`library/` exposes:
+
+| Component | Description |
+| ----------- | ------------- |
+| `Network` | MLP with configurable layers, learning rate, activation — Adam (`None`) or AdamW (`Some(λ)`) |
+| `Matrix` | Pure-Rust matrix ops (multiply, add, subtract, dot-multiply, map, zip-map, transpose) |
+| `Activation` | `IDENTITY`, `SIGMOID`, `TANH`, `RELU` |
 
 ## Examples
-+ Go into the ```example``` folder and see [Readme.md](example/Readme.md) to try the examples.
+
+Go into `example/` and see [Readme.md](example/Readme.md).

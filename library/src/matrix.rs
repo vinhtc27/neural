@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::RngExt;
 
 #[derive(Debug, Clone)]
 pub(crate) struct Matrix {
@@ -17,12 +17,12 @@ impl Matrix {
     }
 
     pub(crate) fn random(rows: usize, cols: usize) -> Matrix {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         Matrix {
             rows,
             cols,
             data: (0..rows)
-                .map(|_| (0..cols).map(|_| rng.gen::<f64>() * 2.0 - 1.0).collect())
+                .map(|_| (0..cols).map(|_| rng.random::<f64>() * 2.0 - 1.0).collect())
                 .collect(),
         }
     }
@@ -115,6 +115,19 @@ impl Matrix {
             }
         }
 
+        result
+    }
+
+    pub(crate) fn zip_map(&self, other: &Matrix, f: &dyn Fn(f64, f64) -> f64) -> Matrix {
+        if self.rows != other.rows || self.cols != other.cols {
+            panic!("Invalid matrix dimensions for zip_map");
+        }
+        let mut result = Matrix::zero(self.rows, self.cols);
+        for i in 0..self.rows {
+            for j in 0..self.cols {
+                result.data[i][j] = f(self.data[i][j], other.data[i][j]);
+            }
+        }
         result
     }
 
