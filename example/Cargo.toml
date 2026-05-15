@@ -15,11 +15,16 @@ path = "src/mnist/main.rs"
 name = "cifar10"
 path = "src/cifar10/main.rs"
 
+[[bin]]
+name = "grokking"
+path = "src/grokking/main.rs"
+
 [dependencies]
 ansi_rgb = "0.2.0"
 rgb = "0.8.37"
 csv = "1.3.0"
 library = { path = "../library" }
+rand = "0.10.1"
 
 # For releases try to max optimizations of the produced binary:
 [profile.release]

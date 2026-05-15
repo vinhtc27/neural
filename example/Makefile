@@ -12,3 +12,6 @@ mnist:
 
 cifar10:
 	cargo run --bin cifar10 --release
+
+grokking:
+	cargo run --bin grokking --release
