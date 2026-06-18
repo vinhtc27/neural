@@ -66,7 +66,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let targets: Vec<Vec<f64>> = train_numbers.iter().map(|number| number.target()).collect();
 
-    let mut network = Network::new(vec![784, 16, 16, 10], LEARNING_RATE, activation::SIGMOID, activation::SIGMOID, None);
+    let mut network = Network::new(
+        vec![784, 16, 16, 10],
+        LEARNING_RATE,
+        activation::SIGMOID,
+        activation::SIGMOID,
+        None,
+    );
 
     network.train_mse_sgd(inputs.clone(), targets.clone(), EPOCHS);
 

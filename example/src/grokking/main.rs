@@ -11,10 +11,6 @@ const WEIGHT_DECAY: f64 = 5e-1;
 const LABEL_SMOOTH: f64 = 1e-2;
 
 fn main() {
-    // Grokking example: (a + b) mod P
-    // Phase 1: train acc → 100% fast (memorization, large weights)
-    // Phase 2: weight decay kills memorization weights → test acc suddenly jumps (grokking)
-
     let p: usize = std::env::args()
         .nth(1)
         .and_then(|s| s.parse().ok())

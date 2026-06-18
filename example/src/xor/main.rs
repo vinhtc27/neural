@@ -1,15 +1,9 @@
-use library::{activation, network::Network};
+use library::{activation, network::Network, visualize::VizConfig};
 
 const EPOCHS: usize = 10_000;
 const LEARNING_RATE: f64 = 1e-3;
 
 fn main() {
-    // XOR example
-    // 0 ^ 0 = 0
-    // 0 ^ 1 = 1
-    // 1 ^ 0 = 1
-    // 1 ^ 1 = 0
-
     let inputs = vec![
         vec![0.0, 0.0],
         vec![0.0, 1.0],
@@ -18,7 +12,21 @@ fn main() {
     ];
     let targets = vec![vec![0.0], vec![1.0], vec![1.0], vec![0.0]];
 
-    let mut network = Network::new(vec![2, 3, 1], LEARNING_RATE, activation::SIGMOID, activation::SIGMOID, None);
+    let mut network = Network::new(
+        vec![2, 3, 1],
+        LEARNING_RATE,
+        activation::SIGMOID,
+        activation::IDENTITY,
+        None,
+    );
+
+    network.set_visualize(
+        VizConfig::new()
+            .precision(4)
+            .max_elems(8)
+            .sample_limit(4)
+            .pause(false),
+    );
 
     network.train_mse_sgd(inputs.clone(), targets.clone(), EPOCHS);
 
